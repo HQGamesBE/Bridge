@@ -1,6 +1,6 @@
 <?php
 /*
- * Copyright (c) Jan Sohn / xxAROX
+ * Copyright (c) Jan Sohn / HQGames
  * All rights reserved.
  * I don't want anyone to use my source code without permission.
  */
@@ -11,7 +11,7 @@ $enable_version_suffix = isset(getopt("vs")["vs"]);
 $secure = getenv("COMPUTERNAME") !== "JANPC";
 $buildOnLocalServer = false;
 $packages = [
-	//EXAMPLE: "xxarox/web-server": ["paths" => ["src/","README.md"], "encode" => true]
+	"xxarox/xxtools" => ["paths" => ["src/","README.md"], "encode" => true]
 ];
 $loader = include_once __DIR__ . "/vendor/autoload.php";
 $startTime = microtime(true);

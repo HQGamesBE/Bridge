@@ -1,5 +1,5 @@
 {
-    "name": "xxarox/template-for-plugins",
+    "name": "hqgames/bridge",
     "version": "1.0",
     "license": "LICENSE",
     "config": {
@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "{namespace}\\": "src/"
+            "HQGames\\Bridge\\": "src/"
         }
     },
     "authors": [
@@ -26,7 +26,11 @@
         {
             "type": "vcs", 
             "url":  "git@github.com:xxAROX/xxTOOLS.git"
-        } 
+        } ,
+        {
+            "type": "vcs",
+            "url":  "git@github.com:HQGamesBE/Protocol.git"
+        }
     ],
     "require": {
         "ext-yaml": "*"
@@ -34,6 +38,7 @@
     "require-dev": {
         "xxarox/plugin-security": "dev-main",
         "xxarox/xxtools": "dev-main",
+        "hqgames/protocol": "dev-main",
         "pocketmine/pocketmine-mp": "^4.2"
     }
 }
