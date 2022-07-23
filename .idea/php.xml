@@ -64,6 +64,7 @@
       <path value="$PROJECT_DIR$/vendor/fgrosse/phpasn1" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/hqgames/protocol" />
+      <path value="$PROJECT_DIR$/../Report-Manager/src" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0" />
