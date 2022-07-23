@@ -3,7 +3,9 @@ version: "1.0"
 author: "HQGames"
 website: "https://github.com/HQGames/"
 description: "Bridge by HQGames."
+loadbefore:
+  - "Core"
 
 api:
   - "4.0.0"
-main: HQGames\HQGames\Bridge
+main: HQGames\Bridge\Bridge

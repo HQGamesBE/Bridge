@@ -9,7 +9,7 @@
     },
     "autoload": {
         "psr-4": {
-            "HQGames\\Bridge\\": "src/"
+            "HQGames\\": "src/"
         }
     },
     "authors": [
@@ -29,16 +29,24 @@
         } ,
         {
             "type": "vcs",
+            "url":  "git@github.com:HQGamesBE/Language-Manager.git"
+        } ,
+        {
+            "type": "vcs",
             "url":  "git@github.com:HQGamesBE/Protocol.git"
         }
     ],
     "require": {
-        "ext-yaml": "*"
+        "ext-yaml": "*",
+        "ext-sockets": "*",
+        "ext-pthreads": "*",
+        "ext-mbstring": "*",
+        "hqgames/protocol": "dev-main"
     },
     "require-dev": {
         "xxarox/plugin-security": "dev-main",
         "xxarox/xxtools": "dev-main",
-        "hqgames/protocol": "dev-main",
+        "hqgames/langauge-manager": "dev-main",
         "pocketmine/pocketmine-mp": "^4.2"
     }
 }
