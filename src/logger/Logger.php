@@ -6,29 +6,30 @@
  */
 
 declare(strict_types=1);
-namespace HQGames\Bridge;
-use HQGames\player\IVirtuellPlayer;
+namespace HQGames\logger;
 use pocketmine\utils\SingletonTrait;
 
 
 /**
- * Class Cache
- * @package HQGames\Bridge
+ * Class Logger
+ * @package HQGames\logger
  * @author Jan Sohn / xxAROX
- * @date 22. July, 2022 - 22:11
+ * @date 24. July, 2022 - 15:48
  * @ide PhpStorm
  * @project Bridge
  */
-final class Cache{
+class Logger{
 	use SingletonTrait{
 		setInstance as private static;
 		reset as private;
 	}
 
-	public string $secret = "null";
+	protected array $entries = [];
 
 	private function __construct(){
-		$this->secret = bin2hex(random_bytes(16));
 	}
 
+	public function log(string $webhook_name, string $message, array $params = []): void{
+		$this->entries[] = LoggerEntry::new($webhook_name, $message, $params);
+	}
 }

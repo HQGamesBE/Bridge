@@ -7,8 +7,11 @@
 
 declare(strict_types=1);
 namespace HQGames\player;
+use HQGames\LanguageManager\player\IVirtualLanguagePlayer;
+use HQGames\player\locker\PlayerLocker;
 use HQGames\player\stats\StatsCollection;
 use HQGames\ReportManager\ReportHistory;
+use pocketmine\player\Player;
 
 
 /**
@@ -19,18 +22,41 @@ use HQGames\ReportManager\ReportHistory;
  * @ide PhpStorm
  * @project Bridge
  */
-interface IVirtuellPlayer{
+interface IVirtuellPlayer extends
+	IVirtualReportPlayer,
+	IVirtualLanguagePlayer
+{
 	public function getIdentifier(): string;
 
-	public function getGroup(): string;
+	public function getName(): string;
+
+	public function isOnline(): bool;
+
+	public function getXuid(): string;
+
+	public function loadData(array $data): void;
+	public function saveData(): array;
+
+	// TODO: player selectable timezone
+
+	public function getGroup(): Group;// TODO: move to IVirtualGroupPlayer
+	public function setGroup(Group $group, Player $by): Group;// TODO: move to IVirtualGroupPlayer
+	public function isNicked(): bool; // TODO: move to IVirtualGroupPlayer
+	public function setNicked(bool $value = false): void; // TODO: move to IVirtualGroupPlayer
+
+	public function getLastSeen(): int;
+
+	public function getLocker(): PlayerLocker;
+
+	public function getSettings(): PlayerSettings;
+
+	public function getOnlineTime(): int;
 
 	/**
 	 * Function getPunishments
 	 * @return Punishment[]
 	 */
-	public function getPunishments(): array;
-
-	public function getReportHistory(): ReportHistory;
+	public function getPunishments(): array; // TODO: move to IVirtualPunishmentPlayer
 
 	public function getRankedStats(): StatsCollection;
 

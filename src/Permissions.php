@@ -13,6 +13,8 @@ use pocketmine\permission\DefaultPermissions;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionManager;
 use pocketmine\utils\SingletonTrait;
+use ReflectionClass;
+use ReflectionProperty;
 
 
 /**
@@ -24,19 +26,31 @@ use pocketmine\utils\SingletonTrait;
  * @project Bridge
  */
 class Permissions{
-	use SingletonTrait{
-		setInstance as private static;
-		reset as private;
-	}
+	private static Permissions $instance;
+	private static Permission $overlord;
 	/** @var Permission[] */
-	private array $permissions = [];
+	private static array $permissions = [];
 
 	private function __construct(){
-		self::setInstance($this);
-		$this->registerPermissions();
+		PermissionManager::getInstance()->addPermission(Permissions::$overlord = new Permission("overlord", "Overlord permission"));
+		$this->register();
 	}
 
-	private function registerPermissions(): void{
+	/**
+	 * Function getInstance
+	 * @return Permissions
+	 */
+	public static function getInstance(): Permissions{
+		return self::$instance ?? self::$instance = new Permissions();
+	}
+
+	/**
+	 * Function registerPermissions
+	 * @return void
+	 */
+	public static function register(): void{
+		foreach ((new ReflectionClass(static::class))->getConstants(ReflectionProperty::IS_PUBLIC) as $constant)
+			PermissionManager::getInstance()->addPermission(new Permission($constant[0], (!is_array($constant) || !isset($constant[1]) ? $constant[1] : "No description provided.")));
 	}
 
 	/**
@@ -44,11 +58,12 @@ class Permissions{
 	 * @param Permission $permission
 	 * @return void
 	 */
-	public function registerPermission(Permission $permission): void{
-		if ($this->isRegistered($permission->getName())) throw new InvalidArgumentException("Permission '{$permission->getName()}' is already registered");
-		$this->permissions[mb_strtolower($permission->getName())] = $permission;
+	public static function registerPermission(Permission $permission): void{
+		if (Permissions::isRegistered($permission->getName())) throw new InvalidArgumentException("Permission '{$permission->getName()}' is already registered");
+		Permissions::$permissions[mb_strtolower($permission->getName())] = $permission;
 		$opRoot = PermissionManager::getInstance()->getPermission(DefaultPermissions::ROOT_OPERATOR);
 		PermissionManager::getInstance()->addPermission($permission);
+		Permissions::$overlord->addChild($permission->getName(), true);
 		$opRoot->addChild($permission->getName(), true);
 	}
 
@@ -57,9 +72,9 @@ class Permissions{
 	 * @param Permission $permission
 	 * @return void
 	 */
-	public function unregisterPermission(Permission $permission): void{
-		if (!$this->isRegistered($permission->getName())) throw new InvalidArgumentException("Permission '{$permission->getName()}' is not registered");
-		unset($this->permissions[mb_strtolower($permission->getName())]);
+	public static function unregisterPermission(Permission $permission): void{
+		if (!Permissions::isRegistered($permission->getName())) throw new InvalidArgumentException("Permission '{$permission->getName()}' is not registered");
+		unset(Permissions::$permissions[mb_strtolower($permission->getName())]);
 		PermissionManager::getInstance()->removePermission($permission);
 	}
 
@@ -68,8 +83,8 @@ class Permissions{
 	 * @param Permission|string $name
 	 * @return bool
 	 */
-	#[Pure] public function isRegistered(Permission|string $name): bool{
-		return isset($this->permissions[mb_strtolower(($name instanceof Permission ? $name->getName() : $name))]);
+	#[Pure] public static function isRegistered(Permission|string $name): bool{
+		return isset(Permissions::$permissions[mb_strtolower(($name instanceof Permission ? $name->getName() : $name))]);
 	}
 
 	/**
@@ -77,16 +92,16 @@ class Permissions{
 	 * @param string $name
 	 * @return null|Permission
 	 */
-	#[Pure] public function getPermission(string $name): ?Permission{
-		if (!$this->isRegistered($name)) return null;
-		return $this->permissions[mb_strtolower($name)] ?? null;
+	#[Pure] public static function getPermission(string $name): ?Permission{
+		if (!Permissions::isRegistered($name)) return null;
+		return Permissions::$permissions[mb_strtolower($name)] ?? null;
 	}
 
 	/**
 	 * Function getPermissions
 	 * @return Permission[]
 	 */
-	public function getPermissions(): array{
-		return $this->permissions;
+	public static function getPermissions(): array{
+		return Permissions::$permissions;
 	}
 }

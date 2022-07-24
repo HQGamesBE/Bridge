@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace HQGames\Bridge;
 use HQGames\Bridge\utils\BackendProperties;
 use HQGames\network\CloudConnection;
+use HQGames\network\PacketHandlerManager;
 use HQGames\network\Packets;
 use HQGames\network\protocol\types\HandshakeData;
+use HQGames\Permissions;
 use HQGames\plugin\ICloudy;
 use pocketmine\plugin\PluginBase;
 use pocketmine\plugin\PluginDescription;
@@ -37,6 +39,7 @@ class Bridge extends PluginBase implements ICloudy{
 
 
 	private ?CloudConnection $cloudConnection = null;
+	public int $last_pong = 0;
 
 	/**
 	 * Bridge constructor.
@@ -79,8 +82,10 @@ class Bridge extends PluginBase implements ICloudy{
 				BackendProperties::getInstance()->getAuthToken()
 			)
 		);
-		$this->getLogger()->info("Bridge is enabled!");
+		Permissions::getInstance();
+		PacketHandlerManager::getInstance()->registerPacketHandler(new BridgePacketHandler($this->cloudConnection));
 		Packets::getInstance()->connect();
+		$this->getLogger()->info("Enabled");
 	}
 
 	public function getBackendProperties(): BackendProperties{

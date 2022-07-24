@@ -4,7 +4,6 @@
  * All rights reserved.
  * I don't want anyone to use my source code without permission.
  */
-
 declare(strict_types=1);
 namespace HQGames\forms\stats;
 use Frago9876543210\EasyForms\elements\FunctionalButton;
@@ -21,12 +20,8 @@ use Frago9876543210\EasyForms\forms\MenuForm;
  */
 class ChooseStatsTypeForm extends MenuForm{
 	public function __construct(){
-		parent::__construct(
-			"%forms.stats.title.choose",
-			"%forms.stats.text.choose",
-			[
-				new FunctionalButton()
-			]
-		);
+		parent::__construct("%forms.stats.title.choose", "%forms.stats.text.choose", [
+				new FunctionalButton(),
+			]);
 	}
 }
